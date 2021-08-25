@@ -1,14 +1,16 @@
 package com.vaca.chip8
 
 import android.content.Context
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter.ViewHolder>() {
@@ -51,27 +53,12 @@ class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter
         return mSympData.size
     }
 
-    inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+
+    inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         var myTextView: TextView = itemView.findViewById(R.id.t)
-        override fun onClick(view: View) {
-            var s = 0
-            for (k in mSympData) {
-                if (k.select) {
-                    s++
-                }
-            }
-
-            mSympData[layoutPosition].select = !mSympData[layoutPosition].select
-
-            notifyItemChanged(layoutPosition)
 
 
-        }
 
-        init {
-            itemView.setOnClickListener(this)
-        }
     }
 
     fun returnSymp(): List<String> {
