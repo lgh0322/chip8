@@ -10,17 +10,23 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
 import androidx.core.content.ContextCompat
-
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.lang.Thread.sleep
 
 
 class Chip8View : SurfaceView,Runnable {
     private val wavePaint = Paint()
     private val bgPaint = Paint()
 
+    lateinit var program:ByteArray
+
     var surfaceHolder: SurfaceHolder = this.holder
 
     private val booleanArray=BooleanArray(64*32){
-        (it %2)==0
+        false
     }
 
     constructor(context: Context?) : super(context) {
@@ -77,6 +83,7 @@ class Chip8View : SurfaceView,Runnable {
     var t4 = 0
     override fun run() {
        while (true){
+           sleep(10)
            if(surfaceHolder.surface.isValid){
                t2++
                t3 = System.currentTimeMillis()
@@ -105,5 +112,6 @@ class Chip8View : SurfaceView,Runnable {
     fun resume() {
         val thread = Thread(this)
         thread.start()
+
     }
 }
