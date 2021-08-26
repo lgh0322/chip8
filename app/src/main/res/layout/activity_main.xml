@@ -18,17 +18,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.vaca.chip8.Chip8View
-            android:id="@+id/chip8"
-            android:layout_width="1080dp"
-            android:layout_height="540dp"
-            android:layout_marginTop="120dp"
-            android:clickable="true"
-            android:focusable="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-
+    <com.vaca.chip8.Chip8View
+        android:id="@+id/chip8"
+        android:layout_width="1080dp"
+        android:layout_height="540dp"
+        android:layout_marginTop="120dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <View
@@ -52,22 +50,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chip9" />
 
-    <com.vaca.chip8.TouchLayout
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ga"
         android:layout_width="1020dp"
         android:layout_height="1020dp"
         android:layout_marginStart="30dp"
-
+        android:overScrollMode="never"
+        android:splitMotionEvents="true"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chip9">
+        app:layout_constraintTop_toBottomOf="@+id/chip9"
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:overScrollMode="never"
-            android:id="@+id/ga"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            />
-    </com.vaca.chip8.TouchLayout>
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

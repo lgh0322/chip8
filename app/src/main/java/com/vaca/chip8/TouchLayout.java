@@ -29,7 +29,7 @@ public class TouchLayout extends LinearLayout {
                 break;
             case MotionEvent.ACTION_POINTER_DOWN:
                 Log.i("TAG-->","多指数量:"+count);
-                return false;
+                return true;
             default:
                 break;
         }

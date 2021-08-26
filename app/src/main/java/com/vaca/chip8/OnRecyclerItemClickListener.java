@@ -41,8 +41,9 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
                 RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
                 onItemLongClick(vh);
             }
-        }else if(e.getAction()==MotionEvent.ACTION_POINTER_DOWN){
-            View child = recyclerView.findChildViewUnder(e.getX(), e.getY());
+        }else if(e.getActionMasked()==MotionEvent.ACTION_POINTER_DOWN){
+            Log.e("fuck","fuckfuck "+e.getX(1));
+            View child = recyclerView.findChildViewUnder(e.getX(1), e.getY(1));
             if (child != null) {
                 RecyclerView.ViewHolder vh = recyclerView.getChildViewHolder(child);
                 onItemClick(vh);
@@ -54,6 +55,8 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
                 onItemLongClick(vh);
             }
         }
+
+
 
     }
 
