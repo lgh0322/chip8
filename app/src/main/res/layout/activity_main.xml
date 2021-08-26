@@ -14,18 +14,23 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_width="1080dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="120dp"
         android:layout_height="540dp"/>
+    <View
+        android:id="@+id/chip9"
+        app:layout_constraintTop_toBottomOf="@+id/chip8"
+        android:background="#F0FAFA"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ga"
 
         android:overScrollMode="never"
         android:layout_width="1080dp"
-        android:layout_marginTop="320dp"
         android:layout_height="1080dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chip8"
+        app:layout_constraintTop_toBottomOf="@+id/chip9"
          />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
