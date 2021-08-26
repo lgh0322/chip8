@@ -1,19 +1,14 @@
-package com.vaca.chip8
+package com.vaca.chip8.view
 
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
-import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
-import android.view.View
 import androidx.core.content.ContextCompat
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.vaca.chip8.R
 import java.lang.Thread.sleep
 
 

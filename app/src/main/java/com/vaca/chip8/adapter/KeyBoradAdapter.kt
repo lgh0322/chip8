@@ -1,9 +1,11 @@
-package com.vaca.chip8
+package com.vaca.chip8.adapter
 
 import android.content.Context
 import android.view.*
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.vaca.chip8.R
+import com.vaca.chip8.bean.KeyBoardBean
 import kotlin.collections.ArrayList
 
 

@@ -1,4 +1,4 @@
-package com.vaca.chip8
+package com.vaca.chip8.bean
 
 data class KeyBoardBean(
     var name: String = "",

@@ -1,9 +1,9 @@
-package com.vaca.chip8
+package com.vaca.chip8.utils
 
 
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnItemTouchListener
-import com.vaca.chip8.TouchData
+import com.vaca.chip8.bean.TouchData
 import android.view.MotionEvent
 
 

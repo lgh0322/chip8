@@ -1,4 +1,4 @@
-package com.vaca.chip8
+package com.vaca.chip8.data
 
 object Chip8Font {
     var chip8_fontset = byteArrayOf(

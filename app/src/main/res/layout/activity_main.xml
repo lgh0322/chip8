@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <com.vaca.chip8.Chip8View
+    <com.vaca.chip8.view.Chip8View
         android:id="@+id/chip8"
         android:layout_width="1080dp"
         android:layout_height="540dp"

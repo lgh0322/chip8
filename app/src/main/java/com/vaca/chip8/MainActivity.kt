@@ -6,7 +6,9 @@ import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.vaca.chip8.adapter.KeyBoradAdapter
 import com.vaca.chip8.databinding.ActivityMainBinding
+import com.vaca.chip8.utils.OnKeyBoardTouchListener
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
