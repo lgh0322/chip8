@@ -17,20 +17,20 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        override fun downClick(holder: RecyclerView.ViewHolder?) {
-            if (holder != null && holder is KeyBoradAdapter.ViewHolder) {
-                Log.e("fuck","fuck11111  ${holder.layoutPosition}")
-                holder.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg2)
-                holder.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+        override fun downClick(vh: RecyclerView.ViewHolder?) {
+            if (vh != null && vh is KeyBoradAdapter.ViewHolder) {
+                Log.e("fuck","fuck11111  ${vh.layoutPosition}")
+                vh.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg2)
+                vh.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
 
             }
         }
 
-        override fun upClick(holder: RecyclerView.ViewHolder?) {
-            if (holder != null&& holder is KeyBoradAdapter.ViewHolder) {
-                Log.e("fuck","fuck2222  ${holder.layoutPosition}")
-                holder.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg1)
-                holder.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.login_black))
+        override fun upClick(vh: RecyclerView.ViewHolder?) {
+            if (vh != null&& vh is KeyBoradAdapter.ViewHolder) {
+                Log.e("fuck","fuck2222  ${vh.layoutPosition}")
+                vh.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg1)
+                vh.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.login_black))
             }
         }
 
