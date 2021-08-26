@@ -3,7 +3,6 @@ package com.vaca.chip8
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,13 +13,13 @@ class MainActivity : AppCompatActivity() {
 
     val symptomList = arrayOf("1","2","3","C","4","5","6","D","7","8","9","E","A","0","B","F")
 
-    inner class fuck(re:RecyclerView): OnRecyclerItemClickListener(re) {
+    inner class touchClass(re:RecyclerView): OnKeyBoardTouchListener(re) {
         override fun onRequestDisallowInterceptTouchEvent(disallowIntercept: Boolean) {
 
         }
 
-        override fun onItemClick(holder: RecyclerView.ViewHolder?) {
-            if (holder != null && holder is SymptomAdapter.ViewHolder) {
+        override fun downClick(holder: RecyclerView.ViewHolder?) {
+            if (holder != null && holder is KeyBoradAdapter.ViewHolder) {
                 Log.e("fuck","fuck11111  ${holder.layoutPosition}")
                 holder.myTextView.background = ContextCompat.getDrawable(
                     this@MainActivity,
@@ -32,8 +31,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        override fun onItemLongClick(holder: RecyclerView.ViewHolder?) {
-            if (holder != null&& holder is SymptomAdapter.ViewHolder) {
+        override fun upClick(holder: RecyclerView.ViewHolder?) {
+            if (holder != null&& holder is KeyBoradAdapter.ViewHolder) {
                 Log.e("fuck","fuck2222  ${holder.layoutPosition}")
                 holder.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg1)
                 holder.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.login_black))
@@ -48,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val sympAdapter = SymptomAdapter(this).apply {
+        val sympAdapter = KeyBoradAdapter(this).apply {
             addAll(symptomList)
         }
 
@@ -58,6 +57,6 @@ class MainActivity : AppCompatActivity() {
         wordRecycler.adapter = sympAdapter
 
 
-        binding.ga.addOnItemTouchListener(fuck(binding.ga))
+        binding.ga.addOnItemTouchListener(touchClass(binding.ga))
     }
 }

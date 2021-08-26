@@ -1,6 +1,6 @@
 package com.vaca.chip8
 
-data class SympBean(
+data class KeyBoardBean(
     var name: String = "",
     var select: Boolean = false
 )

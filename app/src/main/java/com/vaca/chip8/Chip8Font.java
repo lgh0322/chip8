@@ -1,6 +1,6 @@
 package com.vaca.chip8;
 
-public class Font {
+public class Chip8Font {
     public static char[] chip8_fontset =
             {
                     0xF0, 0x90, 0x90, 0x90, 0xF0,

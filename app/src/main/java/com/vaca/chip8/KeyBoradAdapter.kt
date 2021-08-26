@@ -1,20 +1,14 @@
 package com.vaca.chip8
 
 import android.content.Context
-import android.util.Log
 import android.view.*
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import java.util.*
 import kotlin.collections.ArrayList
 
 
-class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter.ViewHolder>() {
-    private val mSympData: MutableList<SympBean> = ArrayList()
+class KeyBoradAdapter(var context: Context) : RecyclerView.Adapter<KeyBoradAdapter.ViewHolder>() {
+    private val mKeyBoardData: MutableList<KeyBoardBean> = ArrayList()
     private val mInflater: LayoutInflater = LayoutInflater.from(context)
 
     // inflates the cell layout from xml when needed
@@ -24,22 +18,22 @@ class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter
     }
 
     fun addAll(userBean: Array<String>) {
-        mSympData.clear()
+        mKeyBoardData.clear()
         for (k in userBean) {
-            mSympData.add(SympBean(k))
+            mKeyBoardData.add(KeyBoardBean(k))
         }
         notifyDataSetChanged()
     }
 
     // binds the data to the TextView in each cell
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.myTextView.text = mSympData[position].name
+        holder.myTextView.text = mKeyBoardData[position].name
 
     }
 
     // total number of cells
     override fun getItemCount(): Int {
-        return mSympData.size
+        return mKeyBoardData.size
     }
 
     override fun getItemId(position: Int): Long {
@@ -56,7 +50,7 @@ class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter
 
     fun returnSymp(): List<String> {
         val x: MutableList<String> = ArrayList()
-        for (k in mSympData) {
+        for (k in mKeyBoardData) {
             if (k.select) {
                 x.add(k.name)
             }
@@ -65,11 +59,11 @@ class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter
     }
 
     fun setSelect(a: Int) {
-        mSympData[a].select = true
+        mKeyBoardData[a].select = true
     }
 
     fun setUnSelect(a: Int) {
-        mSympData[a].select = false
+        mKeyBoardData[a].select = false
     }
 
 
