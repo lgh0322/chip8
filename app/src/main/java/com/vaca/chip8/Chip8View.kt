@@ -11,12 +11,8 @@ import androidx.core.content.ContextCompat
 
 
 class Chip8View : View {
-
-
     private val wavePaint = Paint()
     private val bgPaint = Paint()
-
-
 
     constructor(context: Context?) : super(context) {
         init()
@@ -33,6 +29,11 @@ class Chip8View : View {
     ) {
         init()
     }
+
+
+
+
+
 
     private fun init() {
         wavePaint.apply {
@@ -51,16 +52,10 @@ class Chip8View : View {
     }
 
 
-    lateinit var w: Rect
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-
-
         canvas.drawARGB(255, 255, 255, 0)
-
-
-
     }
 
 
