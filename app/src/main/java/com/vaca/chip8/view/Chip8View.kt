@@ -25,10 +25,20 @@ class Chip8View : SurfaceView,Runnable {
     private val stack=IntArray(16){
         0
     }
+    private val vRegister=IntArray(16){
+        0
+    }
     private var sp=0
 
 
+    var canUpdate=false
 
+    fun clearScreen(){
+        for(k in screenBuffer.indices){
+            screenBuffer[k]=false
+        }
+        canUpdate=true
+    }
 
 
 
@@ -37,16 +47,17 @@ class Chip8View : SurfaceView,Runnable {
         val opcode=program[pc].toInt().shl(8).or(program[pc+1].toInt())
         Log.e("fuyck",opcode.toString())
 
-        val firstCmd=opcode.and(0xf000).shr(12)
-
-        when(firstCmd){
+        when(opcode.and(0xf000).shr(12)){
             0->{
                 when(opcode){
                     0x00E0->{
-
+                        clearScreen()
+                        pc+=2
                     }
                     0x00EE->{
-
+                        sp--
+                        pc=stack[sp]
+                        pc+=2
                     }
                     else->{
 
@@ -54,29 +65,45 @@ class Chip8View : SurfaceView,Runnable {
                 }
             }
             1->{
-
+                pc=opcode.and(0xfff)
             }
             2->{
-
+                stack[sp]=pc
+                sp++
+                pc=opcode.and(0xfff)
             }
             3->{
-
+                if(vRegister[opcode.and(0xf00).shr(8)]==opcode.and(0xff)){
+                    pc+=4
+                }else{
+                    pc+=2
+                }
             }
             4->{
+                if(vRegister[opcode.and(0x0f00).shr(8)]!=opcode.and(0x00ff)){
+                    pc+=4
+                }else{
+                    pc+=2
+                }
 
             }
             5->{
-
+                if(vRegister[opcode.and(0x0f00).shr(8)]==vRegister[opcode.and(0x00f0).shr(4)]){
+                    pc+=4
+                }else{
+                    pc+=2
+                }
             }
             6->{
-
+                vRegister[opcode.and(0x0f00).shr(8)]=opcode.and(0x00ff)
+                pc+=2
             }
             7->{
-
+                vRegister[opcode.and(0x0f00).shr(8)]+=opcode.and(0x00ff)
+                pc+=2
             }
             8->{
-                val lastCmd=opcode.and(0xf)
-                when(lastCmd){
+                when(opcode.and(0xf)){
                     0->{
 
                     }
@@ -126,8 +153,7 @@ class Chip8View : SurfaceView,Runnable {
 
             }
             0xE->{
-                val lastCmd=opcode.and(0xff)
-                when(lastCmd){
+                when(opcode.and(0xff)){
                     0x9E->{
 
                     }
@@ -140,8 +166,7 @@ class Chip8View : SurfaceView,Runnable {
                 }
             }
             0xF->{
-                val lastCmd=opcode.and(0xff)
-                when(lastCmd){
+                when(opcode.and(0xff)){
                     0x07->{
 
                     }
@@ -189,7 +214,7 @@ class Chip8View : SurfaceView,Runnable {
 
    private var surfaceHolder: SurfaceHolder = this.holder
 
-    private val booleanArray=BooleanArray(64*32){
+    private val screenBuffer=BooleanArray(64*32){
         false
     }
 
@@ -248,21 +273,14 @@ class Chip8View : SurfaceView,Runnable {
     override fun run() {
        while (true){
            sleep(10)
-           if(surfaceHolder.surface.isValid){
-               t2++
-               t3 = System.currentTimeMillis()
-               if (t3 - t1 > 1000) {
-             Log.e("fuck",t2.toString())
-                   t1 = t3
-                   t4 = t2
-                   t2 = 0
-               }
+           if(surfaceHolder.surface.isValid&&canUpdate){
+               canUpdate=false
                val canvas=surfaceHolder.lockCanvas()
                val h=height.toFloat()/32
                val w=width.toFloat()/64
                for(k in 0 until 64){
                    for(j in 0 until 32){
-                       if(booleanArray[j*64+k]){
+                       if(screenBuffer[j*64+k]){
                            canvas.drawRect(k*w,j* h,k* w +w,j* h +h,bgPaint)
                        }else{
                            canvas.drawRect(k* w,j* h,k* w +w,j* h +h,wavePaint)
