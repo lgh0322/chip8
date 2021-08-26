@@ -60,10 +60,14 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
                     up(fuck[index2].x,fuck[index2].y);
                 }else{
                     for(int k=0;k<20;k++){
-                        if(fuck[k].press){
-                            up(fuck[k].x,fuck[k].y);
-                            break;
+                        if(fuck[k]!=null){
+                            if(fuck[k].press){
+                                fuck[k].press=false;
+                                up(fuck[k].x,fuck[k].y);
+                                break;
+                            }
                         }
+
                     }
                 }
 
