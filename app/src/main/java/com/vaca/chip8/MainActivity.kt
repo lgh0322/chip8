@@ -61,6 +61,9 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.chip8.chip8Program= ubyteArrayOf(12.toUByte(),13.toUByte())
+        val fuck=234
+        fuck.and(0)
+        Log.e("fuck234",fuck.toString())
 //        binding.chip8.emulate()
     }
 }
