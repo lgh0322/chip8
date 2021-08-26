@@ -8,7 +8,14 @@
     android:clickable="false"
     android:longClickable="false"
     tools:context=".MainActivity">
-
+<TextView
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    android:text="CHIP8 模拟器"
+    android:textSize="40sp"
+    android:gravity="center"
+    android:layout_width="match_parent"
+    android:layout_height="120dp"/>
     <com.vaca.chip8.Chip8View
         android:id="@+id/chip8"
         app:layout_constraintTop_toTopOf="parent"
@@ -22,15 +29,26 @@
         android:background="#F0FAFA"
         android:layout_width="match_parent"
         android:layout_height="30dp"/>
+    <View
+        app:layout_constraintTop_toBottomOf="@+id/chip9"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="#F0FAFA"
+        android:layout_width="30dp"
+        android:layout_height="1080dp"/>
+    <View
+        app:layout_constraintTop_toBottomOf="@+id/chip9"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#F0FAFA"
+        android:layout_width="30dp"
+        android:layout_height="1080dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ga"
-
         android:overScrollMode="never"
-        android:layout_width="1080dp"
-        android:layout_height="1080dp"
+        android:layout_width="1020dp"
+        android:layout_height="1020dp"
+        android:layout_marginStart="30dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chip9"
-         />
+        app:layout_constraintTop_toBottomOf="@+id/chip9" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
