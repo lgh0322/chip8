@@ -10,8 +10,8 @@ import com.vaca.chip8.adapter.KeyBoradAdapter
 import com.vaca.chip8.databinding.ActivityMainBinding
 import com.vaca.chip8.utils.OnKeyBoardTouchListener
 import android.os.Vibrator
-
-
+import com.vaca.chip8.data.Chip8Font
+import com.vaca.chip8.data.fuck
 
 
 class MainActivity : AppCompatActivity() {
@@ -59,7 +59,18 @@ class MainActivity : AppCompatActivity() {
         binding.chip8.resume()
 
 
-        binding.chip8.chip8Program= ubyteArrayOf(12.toUByte(),13.toUByte())
+        val gg= UByteArray(4096){
+            0.toUByte()
+        }
+
+        for(k in Chip8Font.chip8_fontset.indices){
+            gg[k]=Chip8Font.chip8_fontset[k]
+        }
+        for(k in fuck.gaga.indices){
+            gg[k+512]=fuck.gaga[k]
+        }
+        binding.chip8.chip8Program=gg
+        binding.chip8.startProgram()
 
     }
 }

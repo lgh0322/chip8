@@ -10,6 +10,7 @@ import android.view.SurfaceView
 import androidx.core.content.ContextCompat
 import com.vaca.chip8.R
 import java.lang.Thread.sleep
+import java.util.*
 
 
 class Chip8View : SurfaceView,Runnable {
@@ -58,7 +59,6 @@ class Chip8View : SurfaceView,Runnable {
 
 
     fun emulate(){
-        pc=0
         val opcode=program[pc].toInt().shl(8).or(program[pc+1].toInt())
         Log.e("fuyck",opcode.toString())
 
@@ -372,6 +372,24 @@ class Chip8View : SurfaceView,Runnable {
            }
        }
     }
+
+    inner class chipTimer:TimerTask(){
+        override fun run() {
+           if(delayTimer>0){
+               delayTimer--
+           }
+            if(soundTimer>0){
+                soundTimer--
+            }
+            emulate()
+        }
+
+    }
+
+    fun startProgram(){
+        Timer().schedule(chipTimer(), Date(),16)
+    }
+
     fun resume() {
         val thread = Thread(this)
         thread.start()
