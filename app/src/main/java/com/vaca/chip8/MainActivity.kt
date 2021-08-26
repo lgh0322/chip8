@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vaca.chip8.adapter.KeyBoradAdapter
 import com.vaca.chip8.databinding.ActivityMainBinding
 import com.vaca.chip8.utils.OnKeyBoardTouchListener
+import android.os.Vibrator
+
+
+
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -22,6 +26,7 @@ class MainActivity : AppCompatActivity() {
         override fun downClick(vh: RecyclerView.ViewHolder?) {
             if (vh != null && vh is KeyBoradAdapter.ViewHolder) {
                 Log.e("fuck","fuck11111  ${vh.layoutPosition}")
+                vibrator.vibrate(100)
                 vh.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg2)
                 vh.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
 
@@ -38,9 +43,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    lateinit var vibrator: Vibrator
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityMainBinding.inflate(layoutInflater)
+       vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
         setContentView(binding.root)
         val sympAdapter = KeyBoradAdapter(this).apply {
             addAll()
