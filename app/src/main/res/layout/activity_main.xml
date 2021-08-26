@@ -10,20 +10,22 @@
     tools:context=".MainActivity">
 
     <com.vaca.chip8.Chip8View
+        android:id="@+id/chip8"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintDimensionRatio="2:1"
-        android:layout_width="match_parent"
-        android:layout_marginTop="50dp"
-        android:layout_height="0dp"/>
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="1080dp"
+        android:layout_marginTop="80dp"
+        android:layout_height="540dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ga"
+
         android:overScrollMode="never"
-        android:layout_width="match_parent"
-        android:layout_marginBottom="50dp"
-        android:layout_height="0dp"
-        app:layout_constraintDimensionRatio="1:1"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_width="1080dp"
+        android:layout_marginTop="320dp"
+        android:layout_height="1080dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chip8"
          />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
