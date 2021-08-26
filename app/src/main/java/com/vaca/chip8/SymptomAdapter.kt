@@ -53,6 +53,10 @@ class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter
         return mSympData.size
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
 
     inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView){
         var myTextView: TextView = itemView.findViewById(R.id.t)
