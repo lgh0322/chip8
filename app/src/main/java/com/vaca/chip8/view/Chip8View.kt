@@ -16,9 +16,178 @@ class Chip8View : SurfaceView,Runnable {
     private val wavePaint = Paint()
     private val bgPaint = Paint()
 
-    lateinit var program:ByteArray
+    var chip8Program:UByteArray?=null
 
-    var surfaceHolder: SurfaceHolder = this.holder
+    private val program:UByteArray
+    get() = chip8Program!!
+
+    private var pc=0x200
+    private val stack=IntArray(16){
+        0
+    }
+    private var sp=0
+
+
+
+
+
+
+    fun emulate(){
+        pc=0
+        val opcode=program[pc].toInt().shl(8).or(program[pc+1].toInt())
+        Log.e("fuyck",opcode.toString())
+
+        val firstCmd=opcode.and(0xf000).shr(12)
+
+        when(firstCmd){
+            0->{
+                when(opcode){
+                    0x00E0->{
+
+                    }
+                    0x00EE->{
+
+                    }
+                    else->{
+
+                    }
+                }
+            }
+            1->{
+
+            }
+            2->{
+
+            }
+            3->{
+
+            }
+            4->{
+
+            }
+            5->{
+
+            }
+            6->{
+
+            }
+            7->{
+
+            }
+            8->{
+                val lastCmd=opcode.and(0xf)
+                when(lastCmd){
+                    0->{
+
+                    }
+                    1->{
+
+                    }
+                    2->{
+
+                    }
+                    3->{
+
+                    }
+                    4->{
+
+                    }
+                    5->{
+
+                    }
+                    6->{
+
+                    }
+                    7->{
+
+                    }
+                    0xE->{
+
+                    }
+                    else->{
+
+                    }
+
+                }
+            }
+            9->{
+
+            }
+            0xA->{
+
+            }
+            0xB->{
+
+            }
+            0xC->{
+
+            }
+            0xD->{
+
+            }
+            0xE->{
+                val lastCmd=opcode.and(0xff)
+                when(lastCmd){
+                    0x9E->{
+
+                    }
+                    0xA1->{
+
+                    }
+                    else->{
+
+                    }
+                }
+            }
+            0xF->{
+                val lastCmd=opcode.and(0xff)
+                when(lastCmd){
+                    0x07->{
+
+                    }
+                    0x0A->{
+
+                    }
+                    0x15->{
+
+                    }
+                    0x18->{
+
+                    }
+                    0x1E->{
+
+                    }
+                    0x29->{
+
+                    }
+                    0x33->{
+
+                    }
+                    0x55->{
+
+                    }
+                    0x65->{
+
+                    }
+                    else->{
+
+                    }
+                }
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+   private var surfaceHolder: SurfaceHolder = this.holder
 
     private val booleanArray=BooleanArray(64*32){
         false

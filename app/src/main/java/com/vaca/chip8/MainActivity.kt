@@ -57,5 +57,10 @@ class MainActivity : AppCompatActivity() {
         wordRecycler.adapter = sympAdapter
         binding.ga.addOnItemTouchListener(TouchClass(binding.ga))
         binding.chip8.resume()
+
+
+
+        binding.chip8.chip8Program= ubyteArrayOf(12.toUByte(),13.toUByte())
+//        binding.chip8.emulate()
     }
 }
