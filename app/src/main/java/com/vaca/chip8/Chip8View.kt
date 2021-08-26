@@ -5,14 +5,22 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.util.AttributeSet
+import android.view.SurfaceHolder
+import android.view.SurfaceView
 import android.view.View
 import androidx.core.content.ContextCompat
 
 
 
-class Chip8View : View {
+class Chip8View : SurfaceView,Runnable {
     private val wavePaint = Paint()
     private val bgPaint = Paint()
+
+    var surfaceHolder: SurfaceHolder = this.holder
+
+    private val booleanArray=BooleanArray(64*32){
+        (it %2)==0
+    }
 
     constructor(context: Context?) : super(context) {
         init()
@@ -38,14 +46,13 @@ class Chip8View : View {
     private fun init() {
         wavePaint.apply {
             color = getColor(R.color.wave_color)
-            style = Paint.Style.STROKE
-            strokeWidth = 5.0f
+            style = Paint.Style.FILL
         }
 
         bgPaint.apply {
             color = getColor(R.color.gray)
-            style = Paint.Style.STROKE
-            strokeWidth = 2.0f
+            style = Paint.Style.FILL
+
         }
 
 
@@ -55,12 +62,36 @@ class Chip8View : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawARGB(255, 255, 255, 0)
+
     }
 
 
 
     private fun getColor(resource_id: Int): Int {
         return ContextCompat.getColor(context, resource_id)
+    }
+
+    override fun run() {
+       while (true){
+           if(surfaceHolder.surface.isValid){
+               val canvas=surfaceHolder.lockCanvas()
+               val h=height.toFloat()/32
+               val w=width.toFloat()/64
+               for(k in 0 until 64){
+                   for(j in 0 until 32){
+                       if(booleanArray[j*64+k]){
+                           canvas.drawRect(k*w,j* h,k* w +w,j* h +h,bgPaint)
+                       }else{
+                           canvas.drawRect(k* w,j* h,k* w +w,j* h +h,wavePaint)
+                       }
+                   }
+               }
+               surfaceHolder.unlockCanvasAndPost(canvas)
+           }
+       }
+    }
+    fun resume() {
+        val thread = Thread(this)
+        thread.start()
     }
 }

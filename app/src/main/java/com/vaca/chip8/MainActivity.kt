@@ -47,5 +47,6 @@ class MainActivity : AppCompatActivity() {
         wordRecycler.layoutManager = GridLayoutManager(this, 4)
         wordRecycler.adapter = sympAdapter
         binding.ga.addOnItemTouchListener(TouchClass(binding.ga))
+        binding.chip8.resume()
     }
 }
