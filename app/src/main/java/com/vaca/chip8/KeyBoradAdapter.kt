@@ -17,9 +17,11 @@ class KeyBoradAdapter(var context: Context) : RecyclerView.Adapter<KeyBoradAdapt
         return ViewHolder(view)
     }
 
-    fun addAll(userBean: Array<String>) {
+    fun addAll() {
+        val symptomList = arrayOf("1","2","3","C","4","5","6","D","7","8","9","E","A","0","B","F")
+
         mKeyBoardData.clear()
-        for (k in userBean) {
+        for (k in symptomList) {
             mKeyBoardData.add(KeyBoardBean(k))
         }
         notifyDataSetChanged()
