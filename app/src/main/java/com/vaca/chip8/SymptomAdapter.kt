@@ -34,18 +34,7 @@ class SymptomAdapter(var context: Context) : RecyclerView.Adapter<SymptomAdapter
     // binds the data to the TextView in each cell
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.myTextView.text = mSympData[position].name
-        holder.myTextView.background = ContextCompat.getDrawable(
-            context, if (mSympData[position].select) {
-                R.drawable.symp_bg2
-            } else {
-                R.drawable.symp_bg1
-            }
-        )
-        if (mSympData[position].select) {
-            holder.myTextView.setTextColor(ContextCompat.getColor(context, R.color.white))
-        } else {
-            holder.myTextView.setTextColor(ContextCompat.getColor(context, R.color.login_black))
-        }
+
     }
 
     // total number of cells

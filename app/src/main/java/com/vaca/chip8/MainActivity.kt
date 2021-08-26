@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MotionEvent
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vaca.chip8.databinding.ActivityMainBinding
@@ -18,15 +19,24 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        override fun onItemClick(vh: RecyclerView.ViewHolder?) {
-            if (vh != null) {
-                Log.e("fuck","fuck11111  ${vh.layoutPosition}")
+        override fun onItemClick(holder: RecyclerView.ViewHolder?) {
+            if (holder != null && holder is SymptomAdapter.ViewHolder) {
+                Log.e("fuck","fuck11111  ${holder.layoutPosition}")
+                holder.myTextView.background = ContextCompat.getDrawable(
+                    this@MainActivity,
+                        R.drawable.symp_bg2
+                )
+
+                    holder.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.white))
+
             }
         }
 
-        override fun onItemLongClick(vh: RecyclerView.ViewHolder?) {
-            if (vh != null) {
-                Log.e("fuck","fuck2222  ${vh.layoutPosition}")
+        override fun onItemLongClick(holder: RecyclerView.ViewHolder?) {
+            if (holder != null&& holder is SymptomAdapter.ViewHolder) {
+                Log.e("fuck","fuck2222  ${holder.layoutPosition}")
+                holder.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg1)
+                holder.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.login_black))
             }
         }
 

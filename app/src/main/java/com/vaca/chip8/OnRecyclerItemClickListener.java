@@ -4,8 +4,14 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * RecyclerView 的自定义点击监听事件。参考于：
@@ -17,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private GestureDetectorCompat gestureDetector;
     private RecyclerView recyclerView;
+    Data[] fuck=new Data[20];
 
     public OnRecyclerItemClickListener(RecyclerView recyclerView) {
         this.recyclerView = recyclerView;
@@ -35,14 +42,34 @@ public abstract class OnRecyclerItemClickListener implements RecyclerView.OnItem
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_POINTER_DOWN:
                 int index1=e.getActionIndex();
+                if(index1>=2){
+                    return;
+                }
+                fuck[index1]=new Data(e.getX(index1), e.getY(index1),true);
                 down(e.getX(index1), e.getY(index1));
-
                 break;
             case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_POINTER_UP:
                 int index2=e.getActionIndex();
-                up(e.getX(index2), e.getY(index2));
+                if(index2>=2){
+                    return;
+                }
+                if(fuck[index2].press){
+                    fuck[index2].press=false;
+                    up(fuck[index2].x,fuck[index2].y);
+                }else{
+                    for(int k=0;k<20;k++){
+                        if(fuck[k].press){
+                            up(fuck[k].x,fuck[k].y);
+                            break;
+                        }
+                    }
+                }
+
                 break;
+
+
         }
 
 

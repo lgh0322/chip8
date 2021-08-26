@@ -4,7 +4,6 @@
     android:layout_width="250dp"
     android:clickable="true"
     android:focusable="true"
-    android:background="@drawable/button_select"
     android:layout_height="250dp">
 
     <TextView
@@ -13,6 +12,7 @@
         android:layout_height="150dp"
         android:gravity="center"
         android:textColor="@color/login_black"
+        android:background="@drawable/symp_bg1"
         android:textSize="60sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
