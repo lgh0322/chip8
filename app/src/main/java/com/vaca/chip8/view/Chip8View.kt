@@ -66,7 +66,7 @@ class Chip8View : SurfaceView, Runnable {
         val z=opcode.and(0xff)
         val t=opcode.and(0xfff)
 
-        when (opcode.and(0xf000).shr(12)) {
+        when (opcode.shr(12)) {
             0 -> {
                 when (opcode) {
                     0x00E0 -> {
@@ -260,13 +260,13 @@ class Chip8View : SurfaceView, Runnable {
                         for (k in 0..x) {
                             program[addrRegister + k] = vRegister[k].toUByte()
                         }
-                        addrRegister+=x
+                        addrRegister+=(x+1)
                     }
                     0x65 -> {
                         for (k in 0..x) {
                             vRegister[k] = program[addrRegister + k].toInt()
                         }
-                        addrRegister += x
+                        addrRegister += (x+1)
                     }
                     else -> {
 
@@ -327,10 +327,7 @@ class Chip8View : SurfaceView, Runnable {
         return ContextCompat.getColor(context, resource_id)
     }
 
-    var t1 = System.currentTimeMillis()
-    var t2 = 0
-    var t3 = 0L
-    var t4 = 0
+
     override fun run() {
         while (true) {
             sleep(10)
