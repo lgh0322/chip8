@@ -13,44 +13,44 @@ import java.lang.Thread.sleep
 import java.util.*
 
 
-class Chip8View : SurfaceView,Runnable {
+class Chip8View : SurfaceView, Runnable {
     private val wavePaint = Paint()
     private val bgPaint = Paint()
 
-    var chip8Program:UByteArray?=null
+    var chip8Program: UByteArray? = null
 
-    private val program:UByteArray
-    get() = chip8Program!!
+    private val program: UByteArray
+        get() = chip8Program!!
 
-    private var pc=0x200
-    private val stack=IntArray(16){
+    private var pc = 0x200
+    private val stack = IntArray(16) {
         0
     }
-    private val vRegister=IntArray(16){
+    private val vRegister = IntArray(16) {
         0
     }
-    private val keyboard=IntArray(16){
+    val keyboard = IntArray(16) {
         0
     }
-    private var addrRegister=0
-    private var sp=0
+    private var addrRegister = 0
+    private var sp = 0
 
-    private var delayTimer=0
-    private var soundTimer=0
+    private var delayTimer = 0
+    private var soundTimer = 0
 
-    var canUpdate=false
+    var canUpdate = false
 
-    fun clearScreen(){
-        for(k in screenBuffer.indices){
-            screenBuffer[k]=false
+    fun clearScreen() {
+        for (k in screenBuffer.indices) {
+            screenBuffer[k] = false
         }
-        canUpdate=true
+        canUpdate = true
     }
 
 
-    fun isKeyPress():Boolean{
-        for(k in keyboard){
-            if(k==1){
+    fun isKeyPress(): Boolean {
+        for (k in keyboard) {
+            if (k == 1) {
                 return true
             }
         }
@@ -58,244 +58,229 @@ class Chip8View : SurfaceView,Runnable {
     }
 
 
-    fun emulate(){
-        val opcode=program[pc].toInt().shl(8).or(program[pc+1].toInt())
-        Log.e("fuyck",opcode.toString())
+    fun emulate() {
+        val opcode = program[pc].toInt().shl(8).or(program[pc + 1].toInt())
 
-        when(opcode.and(0xf000).shr(12)){
-            0->{
-                when(opcode){
-                    0x00E0->{
+        val x = opcode.and(0x0f00).shr(8)
+        val y = opcode.and(0x00f0).shr(4)
+        val z=opcode.and(0xff)
+        val t=opcode.and(0xfff)
+
+        when (opcode.and(0xf000).shr(12)) {
+            0 -> {
+                when (opcode) {
+                    0x00E0 -> {
                         clearScreen()
                     }
-                    0x00EE->{
+                    0x00EE -> {
                         sp--
-                        pc=stack[sp]
+                        pc = stack[sp]
                     }
-                    else->{
+                    else -> {
 
                     }
                 }
             }
-            1->{
-                pc=opcode.and(0xfff)
-                pc-=2
+            1 -> {
+                pc = t
+                pc -= 2
             }
-            2->{
-                stack[sp]=pc
+            2 -> {
+                stack[sp] = pc
                 sp++
-                pc=opcode.and(0xfff)
-                pc-=2
+                pc = t
+                pc -= 2
             }
-            3->{
-                if(vRegister[opcode.and(0xf00).shr(8)]==opcode.and(0xff)){
-                    pc+=2
+            3 -> {
+                if (vRegister[x] == z) {
+                    pc += 2
                 }
             }
-            4->{
-                if(vRegister[opcode.and(0x0f00).shr(8)]!=opcode.and(0x00ff)){
-                    pc+=2
-                }
-
-            }
-            5->{
-                if(vRegister[opcode.and(0x0f00).shr(8)]==vRegister[opcode.and(0x00f0).shr(4)]){
-                    pc+=2
+            4 -> {
+                if (vRegister[x] !=z) {
+                    pc += 2
                 }
             }
-            6->{
-                vRegister[opcode.and(0x0f00).shr(8)]=opcode.and(0x00ff)
+            5 -> {
+                if (vRegister[x] == vRegister[y]) {
+                    pc += 2
+                }
             }
-            7->{
-                vRegister[opcode.and(0x0f00).shr(8)]+=opcode.and(0x00ff)
+            6 -> {
+                vRegister[x] = z
             }
-            8->{
-                val x=opcode.and(0x0f00).shr(8)
-                val y=opcode.and(0x00f0).shr(4)
-                when(opcode.and(0xf)){
-                    0->{
-                        vRegister[x]=vRegister[y]
+            7 -> {
+                vRegister[x] += z
+                if (vRegister[x] > 255) {
+                    vRegister[x] -= 256
+                }
+            }
+            8 -> {
+                when (opcode.and(0xf)) {
+                    0 -> {
+                        vRegister[x] = vRegister[y]
                     }
-                    1->{
-                        vRegister[x]=vRegister[x].or(vRegister[y])
+                    1 -> {
+                        vRegister[x] = vRegister[x].or(vRegister[y])
                     }
-                    2->{
-                        vRegister[x]=vRegister[x].and(vRegister[y])
+                    2 -> {
+                        vRegister[x] = vRegister[x].and(vRegister[y])
                     }
-                    3->{
-                        vRegister[x]=vRegister[x].xor(vRegister[y])
+                    3 -> {
+                        vRegister[x] = vRegister[x].xor(vRegister[y])
                     }
-                    4->{
-                        if(vRegister[x]+vRegister[y]>255){
-                            vRegister[0xf]=1
-                            vRegister[x]+=vRegister[y]-255
-                        }else{
-                            vRegister[0xf]=0
-                            vRegister[x]+=vRegister[y]
+                    4 -> {
+                        if (vRegister[x] + vRegister[y] > 255) {
+                            vRegister[0xf] = 1
+                            vRegister[x] += vRegister[y] - 256
+                        } else {
+                            vRegister[0xf] = 0
+                            vRegister[x] += vRegister[y]
                         }
                     }
-                    5->{
-                        if(vRegister[x]-vRegister[y]<0){
-                            vRegister[0xf]=0
-                            vRegister[x]=vRegister[x]-vRegister[y]+255
-                        }else{
-                            vRegister[0xf]=1
-                            vRegister[x]-=vRegister[y]
+                    5 -> {
+                        if (vRegister[x] - vRegister[y] < 0) {
+                            vRegister[0xf] = 0
+                            vRegister[x] = vRegister[x] - vRegister[y] + 256
+                        } else {
+                            vRegister[0xf] = 1
+                            vRegister[x] -= vRegister[y]
                         }
                     }
-                    6->{
-                        vRegister[0xf]=vRegister[x].and(0x1)
-                        vRegister[x]=vRegister[x].shr(1)
+                    6 -> {
+                        vRegister[0xf] = vRegister[x].and(0x1)
+                        vRegister[x] = vRegister[x].shr(1)
                     }
-                    7->{
-                        if(vRegister[y]-vRegister[x]<0){
-                            vRegister[0xf]=0
-                            vRegister[x]=vRegister[y]-vRegister[x]+255
-                        }else{
-                            vRegister[0xf]=1
-                            vRegister[x]=vRegister[y]-vRegister[x]
+                    7 -> {
+                        if (vRegister[y] - vRegister[x] < 0) {
+                            vRegister[0xf] = 0
+                            vRegister[x] = vRegister[y] - vRegister[x] + 256
+                        } else {
+                            vRegister[0xf] = 1
+                            vRegister[x] = vRegister[y] - vRegister[x]
                         }
                     }
-                    0xE->{
-                        vRegister[0xf]=vRegister[x].shr(7)
-                        vRegister[x]=vRegister[x].shl(1)
+                    0xE -> {
+                        vRegister[0xf] = vRegister[x].shr(7)
+                        vRegister[x] = vRegister[x].shl(1).and(0xff)
                     }
-                    else->{
+                    else -> {
 
                     }
 
                 }
             }
-            9->{
-                val x=opcode.and(0x0f00).shr(8)
-                val y=opcode.and(0x00f0).shr(4)
-                if(vRegister[x]!=vRegister[y]){
-                    pc+=2
+            9 -> {
+                if (vRegister[x] != vRegister[y]) {
+                    pc += 2
                 }
             }
-            0xA->{
-                addrRegister=opcode.and(0xfff)
+            0xA -> {
+                addrRegister = t
             }
-            0xB->{
-                pc=opcode.and(0xfff)+vRegister[0]
-                pc-=2
+            0xB -> {
+                pc = t + vRegister[0]
+                pc -= 2
             }
-            0xC->{
-                val x=opcode.and(0x0f00).shr(8)
-                val n=opcode.and(0xff)
-                vRegister[x]=(0..255).random().and(n)
+            0xC -> {
+                vRegister[x] = (0..255).random().and(z)
             }
-            0xD->{
-                val x=opcode.and(0x0f00).shr(8)
-                val y=opcode.and(0x00f0).shr(4)
-                val location=y*64+x
-                val height=opcode.and(0xf)
-                vRegister[0xf]=0
-                for(yline in 0 until height){
-                    val pixel=program[addrRegister+yline].toInt()
-                    for(xline in 0 until 8){
-                        val there=screenBuffer[location]
-                        if(there){
-                            if(pixel.and(0x80.shr(xline))!=0){
-                                vRegister[0xf]=1
-                                screenBuffer[location]=false
+            0xD -> {
+                val height = opcode.and(0xf)
+                vRegister[0xf] = 0
+                for (yline in 0 until height) {
+                    val pixel = program[addrRegister + yline].toInt()
+                    for (xline in 0 until 8) {
+                        val location = (y + yline) * 64 + x + xline
+                        val there = screenBuffer[location]
+                        if (pixel.and(0x80.shr(xline)) != 0) {
+                            if (there) {
+                                vRegister[0xf] = 1
                             }
-                        }else{
-                            if(pixel.and(0x80.shr(xline))!=0){
-                                screenBuffer[location]=true
-                            }
+                            screenBuffer[location] = !there
                         }
                     }
                 }
-                canUpdate=true
+                canUpdate = true
             }
-            0xE->{
-                val x=opcode.and(0x0f00).shr(8)
-                when(opcode.and(0xff)){
-                    0x9E->{
-                        if(keyboard[vRegister[x]]==1){
-                            pc+=2
+            0xE -> {
+                when (z) {
+                    0x9E -> {
+                        if (keyboard[vRegister[x]] == 1) {
+                            pc += 2
                         }
                     }
-                    0xA1->{
-                        if(keyboard[vRegister[x]]==0){
-                            pc+=2
+                    0xA1 -> {
+                        if (keyboard[vRegister[x]] == 0) {
+                            pc += 2
                         }
                     }
-                    else->{
+                    else -> {
 
                     }
                 }
             }
-            0xF->{
-                val x=opcode.and(0x0f00).shr(8)
-                when(opcode.and(0xff)){
-                    0x07->{
-                        vRegister[x]=delayTimer
+            0xF -> {
+                when (z) {
+                    0x07 -> {
+                        vRegister[x] = delayTimer
                     }
-                    0x0A->{
-                        if(isKeyPress()){
-                            pc+=2
+                    0x0A -> {
+                        if (isKeyPress()) {
+                            pc += 2
                         }
-                        pc-=2
+                        pc -= 2
                     }
-                    0x15->{
-                        delayTimer=vRegister[x]
+                    0x15 -> {
+                        delayTimer = vRegister[x]
 
                     }
-                    0x18->{
-                        soundTimer=vRegister[x]
+                    0x18 -> {
+                        soundTimer = vRegister[x]
                     }
-                    0x1E->{
-                        if(vRegister[x]+addrRegister>0xfff){
-                            addrRegister=vRegister[x]+addrRegister-0xfff
-                            vRegister[0xf]=1
-                        }else{
-                            addrRegister+=vRegister[x]
-                            vRegister[0xf]=0
+                    0x1E -> {
+                        if (vRegister[x] + addrRegister > 0xfff) {
+                            addrRegister = vRegister[x] + addrRegister - 0xfff - 1
+                            vRegister[0xf] = 1
+                        } else {
+                            addrRegister += vRegister[x]
+                            vRegister[0xf] = 0
                         }
 
                     }
-                    0x29->{
-                        addrRegister=vRegister[x]*0x5
+                    0x29 -> {
+                        addrRegister = vRegister[x] * 0x5
                     }
-                    0x33->{
-                        program[addrRegister]=(vRegister[x]/100).toUByte()
-                        program[addrRegister+1]=((vRegister[x]/10)%10).toUByte()
-                        program[addrRegister+2]=(vRegister[x]%10).toUByte()
+                    0x33 -> {
+                        program[addrRegister] = (vRegister[x] / 100).toUByte()
+                        program[addrRegister + 1] = ((vRegister[x] / 10) % 10).toUByte()
+                        program[addrRegister + 2] = (vRegister[x] % 10).toUByte()
                     }
-                    0x55->{
-                        for(k in 0..x){
-                            program[addrRegister+k]=vRegister[k].toUByte()
+                    0x55 -> {
+                        for (k in 0..x) {
+                            program[addrRegister + k] = vRegister[k].toUByte()
                         }
+                        addrRegister+=x
                     }
-                    0x65->{
-                        for(k in 0..x){
-                            vRegister[k]=program[addrRegister+k].toInt()
+                    0x65 -> {
+                        for (k in 0..x) {
+                            vRegister[k] = program[addrRegister + k].toInt()
                         }
+                        addrRegister += x
                     }
-                    else->{
+                    else -> {
 
                     }
                 }
             }
         }
-        pc+=2
+        pc += 2
     }
 
 
+    private var surfaceHolder: SurfaceHolder = this.holder
 
-
-
-
-
-
-
-
-
-   private var surfaceHolder: SurfaceHolder = this.holder
-
-    private val screenBuffer=BooleanArray(64*32){
+    private val screenBuffer = BooleanArray(64 * 32) {
         false
     }
 
@@ -316,10 +301,6 @@ class Chip8View : SurfaceView,Runnable {
     }
 
 
-
-
-
-
     private fun init() {
         wavePaint.apply {
             color = getColor(R.color.wave_color)
@@ -336,49 +317,48 @@ class Chip8View : SurfaceView,Runnable {
     }
 
 
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
     }
 
 
-
     private fun getColor(resource_id: Int): Int {
         return ContextCompat.getColor(context, resource_id)
     }
+
     var t1 = System.currentTimeMillis()
     var t2 = 0
     var t3 = 0L
     var t4 = 0
     override fun run() {
-       while (true){
-           sleep(10)
-           if(surfaceHolder.surface.isValid&&canUpdate){
-               canUpdate=false
-               val canvas=surfaceHolder.lockCanvas()
-               val h=height.toFloat()/32
-               val w=width.toFloat()/64
-               for(k in 0 until 64){
-                   for(j in 0 until 32){
-                       if(screenBuffer[j*64+k]){
-                           canvas.drawRect(k*w,j* h,k* w +w,j* h +h,bgPaint)
-                       }else{
-                           canvas.drawRect(k* w,j* h,k* w +w,j* h +h,wavePaint)
-                       }
-                   }
-               }
-               surfaceHolder.unlockCanvasAndPost(canvas)
-           }
-       }
+        while (true) {
+            sleep(10)
+            if (surfaceHolder.surface.isValid && canUpdate) {
+                canUpdate = false
+                val canvas = surfaceHolder.lockCanvas()
+                val h = height.toFloat() / 32
+                val w = width.toFloat() / 64
+                for (k in 0 until 64) {
+                    for (j in 0 until 32) {
+                        if (screenBuffer[j * 64 + k]) {
+                            canvas.drawRect(k * w, j * h, k * w + w, j * h + h, bgPaint)
+                        } else {
+                            canvas.drawRect(k * w, j * h, k * w + w, j * h + h, wavePaint)
+                        }
+                    }
+                }
+                surfaceHolder.unlockCanvasAndPost(canvas)
+            }
+        }
     }
 
-    inner class chipTimer:TimerTask(){
+    inner class chipTimer : TimerTask() {
         override fun run() {
-           if(delayTimer>0){
-               delayTimer--
-           }
-            if(soundTimer>0){
+            if (delayTimer > 0) {
+                delayTimer--
+            }
+            if (soundTimer > 0) {
                 soundTimer--
             }
             emulate()
@@ -386,8 +366,8 @@ class Chip8View : SurfaceView,Runnable {
 
     }
 
-    fun startProgram(){
-        Timer().schedule(chipTimer(), Date(),16)
+    fun startProgram() {
+        Timer().schedule(chipTimer(), Date(), 16)
     }
 
     fun resume() {

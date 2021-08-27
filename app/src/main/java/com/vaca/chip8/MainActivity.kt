@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun downClick(vh: RecyclerView.ViewHolder?) {
             if (vh != null && vh is KeyBoradAdapter.ViewHolder) {
+                binding.chip8.keyboard[vh.layoutPosition]=1
                 Log.e("fuck","fuck11111  ${vh.layoutPosition}")
                 vibrator.vibrate(100)
                 vh.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg2)
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun upClick(vh: RecyclerView.ViewHolder?) {
             if (vh != null&& vh is KeyBoradAdapter.ViewHolder) {
+                binding.chip8.keyboard[vh.layoutPosition]=0
                 Log.e("fuck","fuck2222  ${vh.layoutPosition}")
                 vh.myTextView.background = ContextCompat.getDrawable(this@MainActivity, R.drawable.symp_bg1)
                 vh.myTextView.setTextColor(ContextCompat.getColor(this@MainActivity, R.color.login_black))
