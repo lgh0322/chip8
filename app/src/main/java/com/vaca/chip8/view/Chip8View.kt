@@ -57,7 +57,12 @@ class Chip8View : SurfaceView, Runnable {
         return false
     }
 
+    fun mainX(b:Int):String {
 
+        val st = String.format("%02X", b)
+
+        return st
+    }
     fun emulate() {
 
 
@@ -67,7 +72,7 @@ class Chip8View : SurfaceView, Runnable {
 
 
         val opcode = program[pc].toInt().shl(8).or(program[pc + 1].toInt())
-        Log.e("fuck","pc   $pc       $opcode")
+        Log.e("fuck","pc   $pc       "+mainX(opcode))
         val x = opcode.and(0x0f00).shr(8)
         val y = opcode.and(0x00f0).shr(4)
         val z=opcode.and(0xff)
