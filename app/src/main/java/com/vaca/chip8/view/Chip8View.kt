@@ -64,13 +64,6 @@ class Chip8View : SurfaceView, Runnable {
         return st
     }
     fun emulate() {
-
-
-
-
-
-
-
         val opcode = program[pc].toInt().shl(8).or(program[pc + 1].toInt())
         Log.e("fuck","pc   $pc       "+mainX(opcode))
         val x = opcode.and(0x0f00).shr(8)
@@ -87,9 +80,10 @@ class Chip8View : SurfaceView, Runnable {
                     0x00EE -> {
                         sp--
                         pc = stack[sp]
+                        pc-=2
                     }
                     else -> {
-
+                        pc-=2
                     }
                 }
             }
@@ -177,6 +171,7 @@ class Chip8View : SurfaceView, Runnable {
                         vRegister[x] = vRegister[x].shl(1).and(0xff)
                     }
                     else -> {
+                        pc-=2
 
                     }
 
@@ -228,6 +223,7 @@ class Chip8View : SurfaceView, Runnable {
                         }
                     }
                     else -> {
+                        pc-=2
 
                     }
                 }
@@ -245,23 +241,15 @@ class Chip8View : SurfaceView, Runnable {
                     }
                     0x15 -> {
                         delayTimer = vRegister[x]
-
                     }
                     0x18 -> {
                         soundTimer = vRegister[x]
                     }
                     0x1E -> {
-                        if (vRegister[x] + addrRegister > 0xfff) {
-                            addrRegister = vRegister[x] + addrRegister - 0xfff - 1
-                            vRegister[0xf] = 1
-                        } else {
-                            addrRegister += vRegister[x]
-                            vRegister[0xf] = 0
-                        }
-
+                        addrRegister += vRegister[x]
                     }
                     0x29 -> {
-                        addrRegister = vRegister[x] * 0x5
+                        addrRegister = vRegister[x]*5
                     }
                     0x33 -> {
                         program[addrRegister] = (vRegister[x] / 100).toUByte()
@@ -272,16 +260,14 @@ class Chip8View : SurfaceView, Runnable {
                         for (k in 0..x) {
                             program[addrRegister + k] = vRegister[k].toUByte()
                         }
-                        addrRegister+=(x+1)
                     }
                     0x65 -> {
                         for (k in 0..x) {
                             vRegister[k] = program[addrRegister + k].toInt()
                         }
-                        addrRegister += (x+1)
                     }
                     else -> {
-
+                        pc-=2
                     }
                 }
             }
