@@ -69,7 +69,7 @@ class MainActivity : AppCompatActivity() {
             gg[k]=Chip8Font.chip8_fontset[k]
         }
         for(k in fuck.gaga.indices){
-            gg[k+0x200]=fuck.gaga[k]
+            gg[k+0x200]=fuck.gaga[k].toUByte()
         }
         binding.chip8.chip8Program=gg
         binding.chip8.startProgram()
