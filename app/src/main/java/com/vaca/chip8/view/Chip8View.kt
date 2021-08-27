@@ -59,8 +59,14 @@ class Chip8View : SurfaceView, Runnable {
 
 
     fun emulate() {
-        val opcode = program[pc].toInt().shl(8).or(program[pc + 1].toInt())
+        Log.e("fuck","pc   $pc")
 
+
+
+
+
+
+        val opcode = program[pc].toInt().shl(8).or(program[pc + 1].toInt())
         val x = opcode.and(0x0f00).shr(8)
         val y = opcode.and(0x00f0).shr(4)
         val z=opcode.and(0xff)
@@ -275,6 +281,7 @@ class Chip8View : SurfaceView, Runnable {
             }
         }
         pc += 2
+
     }
 
 
