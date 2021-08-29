@@ -65,7 +65,7 @@ class Chip8View : SurfaceView, Runnable {
     }
     fun emulate() {
         val opcode = program[pc].toInt().shl(8).or(program[pc + 1].toInt())
-        Log.e("fuck","pc   $pc       "+mainX(opcode))
+        Log.e("fuck","pcxx   $pc       "+mainX(opcode))
         val x = opcode.and(0x0f00).shr(8)
         val y = opcode.and(0x00f0).shr(4)
         val z=opcode.and(0xff)
@@ -80,7 +80,6 @@ class Chip8View : SurfaceView, Runnable {
                     0x00EE -> {
                         sp--
                         pc = stack[sp]
-                        pc-=2
                     }
                     else -> {
                         pc-=2
@@ -198,7 +197,13 @@ class Chip8View : SurfaceView, Runnable {
                 for (yline in 0 until height) {
                     val pixel = program[addrRegister + yline].toInt()
                     for (xline in 0 until 8) {
-                        val location = (y + yline) * 64 + x + xline
+                        if(vRegister[x] + xline>=64){
+                            continue
+                        }
+                        if(vRegister[y] + yline>=32){
+                            continue
+                        }
+                        val location = (vRegister[y] + yline) * 64 + vRegister[x] + xline
                         val there = screenBuffer[location]
                         if (pixel.and(0x80.shr(xline)) != 0) {
                             if (there) {
@@ -348,7 +353,7 @@ class Chip8View : SurfaceView, Runnable {
             }
         }
     }
-    var k=0
+
 
     inner class chipTimer : TimerTask() {
         override fun run() {
@@ -359,16 +364,22 @@ class Chip8View : SurfaceView, Runnable {
                 soundTimer--
             }
 
-                emulate()
 
+        }
 
-            k++;
+    }
+
+    inner class chipRun : TimerTask() {
+        override fun run() {
+            emulate()
+
         }
 
     }
 
     fun startProgram() {
         Timer().schedule(chipTimer(), Date(), 16)
+        Timer().schedule(chipRun() , Date(), 2)
     }
 
     fun resume() {
