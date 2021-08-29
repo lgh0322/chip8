@@ -48,13 +48,13 @@ class Chip8View : SurfaceView, Runnable {
     }
 
 
-    fun isKeyPress(): Boolean {
-        for (k in keyboard) {
-            if (k == 1) {
-                return true
+    fun isKeyPress(): Int {
+        for (k in keyboard.indices) {
+            if (keyboard[k] == 1) {
+                return k
             }
         }
-        return false
+        return -1
     }
 
     fun mainX(b:Int):String {
@@ -65,7 +65,7 @@ class Chip8View : SurfaceView, Runnable {
     }
     fun emulate() {
         val opcode = program[pc].toInt().shl(8).or(program[pc + 1].toInt())
-        Log.e("fuck","pcxx   $pc       "+mainX(opcode))
+        Log.e("fuck","pcxx   $pc   $opcode    "+mainX(opcode)        )
         val x = opcode.and(0x0f00).shr(8)
         val y = opcode.and(0x00f0).shr(4)
         val z=opcode.and(0xff)
@@ -137,7 +137,7 @@ class Chip8View : SurfaceView, Runnable {
                     4 -> {
                         if (vRegister[x] + vRegister[y] > 255) {
                             vRegister[0xf] = 1
-                            vRegister[x] += vRegister[y] - 256
+                            vRegister[x] +=(vRegister[y] - 256)
                         } else {
                             vRegister[0xf] = 0
                             vRegister[x] += vRegister[y]
@@ -239,7 +239,9 @@ class Chip8View : SurfaceView, Runnable {
                         vRegister[x] = delayTimer
                     }
                     0x0A -> {
-                        if (isKeyPress()) {
+                        val temp=isKeyPress()
+                        if (temp!=-1) {
+                            vRegister[x]=temp
                             pc += 2
                         }
                         pc -= 2
@@ -379,7 +381,7 @@ class Chip8View : SurfaceView, Runnable {
 
     fun startProgram() {
         Timer().schedule(chipTimer(), Date(), 16)
-        Timer().schedule(chipRun() , Date(), 2)
+        Timer().schedule(chipRun() , Date(), 1)
     }
 
     fun resume() {
